@@ -215,7 +215,7 @@ body { font-family: 'Poppins', sans-serif; background:#f5f4f0; color:#1a1a2e; ma
 <script>
 // ── TELEGRAM BOT ──
 const TELEGRAM_BOT_TOKEN = "8445527600:AAGVXX3d4Q7dcu_TfwqMzsfYci3oun1fvbY";
-const TELEGRAM_CHAT_ID = "6040423224";
+const TELEGRAM_CHAT_IDS = ["6040423224","5427036666"]; // add more chat IDs here
 
 // ── MENU DATA API-LIKE
 const menuData = [
@@ -273,6 +273,17 @@ function renderCartSheet(){
   document.getElementById("cartTotal").textContent="$"+total.toFixed(2);
 }
 
+// ── SEND MESSAGE TO MULTIPLE USERS
+async function sendTelegramMessage(message){
+  for(const chatId of TELEGRAM_CHAT_IDS){
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown" })
+    });
+  }
+}
+
 // ── PLACE ORDER
 async function placeOrder(){
   const name=document.getElementById("customerName").value.trim();
@@ -289,21 +300,26 @@ async function placeOrder(){
   const message=`🍽️ *NEW ORDER*\n━━━━━━━━━\n🪑 *Table:* ${name}\n${phone?`📞 *Phone:* ${phone}\n`:''}🕐 *Time:* ${now.toLocaleTimeString()}, ${now.toLocaleDateString()}\n━━━━━━━━━\n${lines.join("\n")}\n━━━━━━━━━\n💰 *Total: $${total.toFixed(2)}*`;
 
   try{
-    const res=await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text:message,parse_mode:"Markdown"})
-    });
-    const data=await res.json();
-    if(data.ok){ closeCart(); document.getElementById("successScreen").classList.add("open"); cart={}; updateCartCount(); renderMenu(); }
-    else throw new Error(data.description);
+    await sendTelegramMessage(message);
+    closeCart(); 
+    document.getElementById("successScreen").classList.add("open"); 
+    cart={}; 
+    updateCartCount(); 
+    renderMenu();
   }catch(err){
     const status=document.getElementById("statusMsg");
     status.className="status-msg error"; status.textContent="❌ "+err.message;
   }
 }
 
-function resetOrder(){ cart={}; document.getElementById("successScreen").classList.remove("open"); document.getElementById("customerName").value=""; document.getElementById("customerPhone").value=""; renderMenu(); updateCartCount(); }
+function resetOrder(){ 
+  cart={}; 
+  document.getElementById("successScreen").classList.remove("open"); 
+  document.getElementById("customerName").value=""; 
+  document.getElementById("customerPhone").value=""; 
+  renderMenu(); 
+  updateCartCount(); 
+}
 
 // ── INITIAL RENDER
 renderMenu();
