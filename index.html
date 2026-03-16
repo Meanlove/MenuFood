@@ -1,328 +1,518 @@
 <!DOCTYPE html>
-<html lang="km">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Indigenous Food & Coffee</title>
-
-<!-- GOOGLE FONTS -->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+Khmer:wght@300;400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ── RESET ── */
-*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-body { font-family: 'Poppins', sans-serif; background:#f5f4f0; color:#1a1a2e; max-width:430px; margin:0 auto; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0d0d;
+    --surface: #1a1a1a;
+    --surface2: #242424;
+    --border: rgba(255,255,255,0.08);
+    --accent: #c87d30;
+    --accent2: #f5d9a8;
+    --text: #f0ede8;
+    --muted: rgba(240,237,232,0.45);
+    --card-radius: 18px;
+    --font-display: 'Playfair Display', serif;
+    --font-khmer: 'Noto Sans Khmer', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-body); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  #app { max-width: 430px; margin: 0 auto; height: 100dvh; display: flex; flex-direction: column; position: relative; overflow: hidden; }
 
-/* ── HERO SECTION ── */
-.hero {
-  position: relative;
-  width: 100%;
-  height: 300px;
-  background-image: url('https://i.pinimg.com/1200x/53/0a/8a/530a8a2fc5335529bb1186b1a7490331.jpg');
-  background-size: cover;
-  background-position: center;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  /* ── HERO SLIDE ── */
+  .hero-slider { flex-shrink: 0; position: relative; width: 100%; height: 220px; overflow: hidden; }
+  .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1s ease; background-size: cover; background-position: center; }
+  .slide.active { opacity: 1; }
+  .slide-1 { background-image: linear-gradient(to bottom, rgba(10,5,0,0.2) 0%, rgba(10,5,0,0.5) 55%, rgba(13,13,13,1) 100%), url('https://i.ytimg.com/vi/YXD2KlobR7E/sddefault.jpg'); }
+  .slide-2 { background-image: linear-gradient(to bottom, rgba(10,5,0,0.2) 0%, rgba(10,5,0,0.5) 55%, rgba(13,13,13,1) 100%), url('https://i.ytimg.com/vi/U4sYnhdxZvo/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCEIcoNm8jtfXHDmGel2GxtKluf4w'); }
+  .slide-3 { background-image: linear-gradient(to bottom, rgba(10,5,0,0.2) 0%, rgba(10,5,0,0.5) 55%, rgba(13,13,13,1) 100%), url('https://image.vovworld.vn/w500/Uploaded/vovworld/cqjwqkrwq/2016_10_25/b2.jpg'); }
 
-.hero-overlay {
-  background: rgba(0,0,0,0.4);
-  width: 100%;
-  height: 100%;
-  border-radius:16px;
-  display:flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding:0 16px;
-}
+  .slide-content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 14px 16px 18px; }
 
-.hero-title {
-  font-family: 'Poppins', sans-serif;
-  font-size:28px;
-  color:#fff;
-  font-weight:700;
-  letter-spacing:1px;
-  margin-bottom:12px;
-}
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .hero-logo { display: flex; align-items: center; gap: 9px; }
+  .hero-logo-circle { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0; background: #1a1a1a; }
+  .hero-logo-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero-logo-text { display: flex; flex-direction: column; }
+  .hero-logo-name { font-family: var(--font-display); color: var(--accent2); font-size: 0.82rem; font-weight: 700; line-height: 1.2; }
+  .hero-logo-sub { color: rgba(245,217,168,0.5); font-size: 0.62rem; font-weight: 300; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
 
-.hero-subtitle {
-  font-family: 'Noto Sans Khmer', sans-serif;
-  font-size:20px;
-  color:#fff;
-  font-weight:500;
-  line-height:1.4;
-}
+  .cart-fab {
+    background: var(--accent); border: none; border-radius: 24px;
+    color: #1a0e04; font-family: var(--font-body); font-size: 13px; font-weight: 500;
+    padding: 7px 14px; cursor: pointer; display: flex; align-items: center; gap: 7px;
+    transition: opacity 0.15s, transform 0.1s; flex-shrink: 0;
+  }
+  .cart-fab:active { transform: scale(0.96); }
+  .cart-fab .n { background: rgba(0,0,0,0.2); border-radius: 50%; width: 20px; height: 20px; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
 
-/* ── HEADER ── */
-.header {
-  background:#1a1a2e;
-  padding:12px 16px;
-  position: sticky;
-  top:0;
-  z-index:100;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-radius:16px 16px 0 0;
-}
-.cart-btn {
-  background:#e94560;
-  border:none;
-  border-radius:24px;
-  color:#fff;
-  font-size:13px;
-  font-weight:500;
-  padding:8px 16px;
-  cursor:pointer;
-}
-.cart-count {
-  background:#fff;
-  color:#e94560;
-  border-radius:50%;
-  width:20px; height:20px;
-  font-size:11px;
-  font-weight:700;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-}
+  .hero-bottom { }
+  .hero-khmer-tag { font-family: var(--font-khmer); color: rgba(245,217,168,0.6); font-size: 0.72rem; font-weight: 300; display: block; margin-bottom: 4px; }
+  .hero-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; color: #fff; line-height: 1.2; text-shadow: 0 2px 12px rgba(0,0,0,0.4); }
+  .hero-title span { color: var(--accent); }
+  .hero-sub { font-family: var(--font-khmer); color: rgba(255,255,255,0.5); font-size: 0.72rem; margin-top: 4px; }
 
-/* ── MENU ── */
-.menu-body { padding:16px; }
-.item-card {
-  background:#fff;
-  border-radius:14px;
-  padding:12px;
-  margin-bottom:10px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  box-shadow:0 1px 4px rgba(0,0,0,0.06);
-}
-.item-card img { width:60px; height:60px; border-radius:10px; object-fit:cover; }
-.item-info { flex:1; }
-.item-name { font-weight:600; font-size:16px; }
-.item-price { font-weight:700; color:#e94560; margin-top:4px; }
-.add-btn {
-  background:#1a1a2e; color:#fff;
-  border:none; border-radius:50%;
-  width:34px; height:34px;
-  font-size:22px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-}
+  /* dots */
+  .hero-dots { position: absolute; bottom: 22px; right: 16px; display: flex; gap: 5px; z-index: 5; }
+  .hdot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.25); cursor: pointer; transition: all 0.3s; }
+  .hdot.active { background: var(--accent); width: 16px; border-radius: 3px; }
 
-/* ── CART OVERLAY ── */
-.overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,0.4);
-  display:none; align-items:flex-end; z-index:200;
-}
-.overlay.open { display:flex; }
-.cart-sheet {
-  background:#fff; border-radius:24px 24px 0 0;
-  width:100%; max-height:90vh;
-  display:flex; flex-direction:column;
-  animation:slideUp 0.25s ease;
-}
-@keyframes slideUp { from{transform:translateY(100%);} to{transform:translateY(0);} }
-.sheet-header { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid rgba(0,0,0,0.08);}
-.close-btn { background:#f5f4f0; border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; }
+  /* arrows */
+  .harrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; color: #fff; font-size: 1rem; transition: background 0.2s; user-select: none; }
+  .harrow:hover { background: rgba(255,255,255,0.18); }
+  .harrow.prev { left: 10px; }
+  .harrow.next { right: 10px; }
 
-.cart-items { overflow-y:auto; flex:1; padding:16px 20px; }
-.cart-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.08); }
-.cart-row-info { flex:1; }
-.cart-row-name { font-size:14px; font-weight:600; }
-.cart-row-sub { font-size:12px; color:#6b7280; margin-top:2px; }
-.cart-row-price { font-weight:700; color:#e94560; }
+  /* ── CATEGORIES ── */
+  .cats-wrap { flex-shrink: 0; padding: 10px 16px 0; background: var(--bg); }
+  .cats { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+  .cats::-webkit-scrollbar { display: none; }
+  .cat { background: var(--surface); border: 1px solid var(--border); color: var(--muted); border-radius: 24px; padding: 6px 16px; font-family: var(--font-body); font-size: 13px; font-weight: 400; cursor: pointer; white-space: nowrap; transition: all 0.15s; flex-shrink: 0; }
+  .cat.on { background: var(--accent); border-color: var(--accent); color: #1a0e04; font-weight: 500; }
 
-.cart-footer { padding:16px 20px 28px; }
-.total-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
-.total-label{ font-size:15px; color:#6b7280;}
-.total-value{ font-size:20px; font-weight:700; color:#1a1a2e;}
-.form-input { width:100%; padding:12px; border:1.5px solid rgba(0,0,0,0.08); border-radius:8px; font-size:15px; margin-top:6px; }
-.order-btn { width:100%; background:#e94560; color:#fff; border:none; padding:15px; font-weight:700; cursor:pointer; margin-top:6px; }
-.order-btn:disabled { opacity:0.5; cursor:default; }
+  /* ── MENU GRID ── */
+  .menu-scroll { flex: 1; overflow-y: auto; padding: 8px 16px 100px; scrollbar-width: none; }
+  .menu-scroll::-webkit-scrollbar { display: none; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .item-card { background: var(--surface); border-radius: var(--card-radius); overflow: hidden; border: 1px solid var(--border); cursor: pointer; transition: transform 0.12s, border-color 0.12s; animation: fadeUp 0.3s ease both; }
+  .item-card:active { transform: scale(0.97); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .item-card:nth-child(1){animation-delay:0s} .item-card:nth-child(2){animation-delay:.04s} .item-card:nth-child(3){animation-delay:.08s} .item-card:nth-child(4){animation-delay:.12s} .item-card:nth-child(5){animation-delay:.16s} .item-card:nth-child(6){animation-delay:.20s}
+  .item-img-wrap { width: 100%; height: 120px; overflow: hidden; position: relative; background: var(--surface2); }
+  .item-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+  .item-card:hover .item-img-wrap img { transform: scale(1.05); }
+  .item-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 42px; }
+  .item-body { padding: 10px 11px 12px; }
+  .item-name { font-family: var(--font-khmer); font-size: 12px; font-weight: 600; line-height: 1.4; color: var(--text); margin-bottom: 8px; }
+  .item-bottom { display: flex; align-items: center; justify-content: space-between; }
+  .item-price { font-size: 15px; font-weight: 500; color: var(--accent2); font-family: var(--font-display); }
+  .add-btn { background: var(--accent); border: none; border-radius: 50%; color: #1a0e04; width: 30px; height: 30px; font-size: 20px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; flex-shrink: 0; }
+  .add-btn:active { transform: scale(0.9); }
+  .qty-row { display: flex; align-items: center; gap: 6px; }
+  .qty-row button { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 50%; width: 26px; height: 26px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .qty-row button:active { background: var(--accent); border-color: var(--accent); }
+  .qty-row .num { font-size: 13px; font-weight: 500; min-width: 14px; text-align: center; }
 
-/* ── SUCCESS SCREEN ── */
-.success-overlay { position:fixed; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; background:#f5f4f0; z-index:300; text-align:center; padding:40px; }
-.success-overlay.open { display:flex; }
-.success-big { font-size:72px; margin-bottom:20px; }
-.success-title { font-size:24px; font-weight:700; margin-bottom:10px; }
-.success-sub { font-size:15px; color:#6b7280; line-height:1.7; max-width:280px; }
-.new-order-btn { margin-top:32px; background:#1a1a2e; color:#fff; border:none; border-radius:14px; padding:14px 32px; cursor:pointer; }
+  /* ── CART PANEL ── */
+  .panel { position: absolute; inset: 0; background: var(--bg); display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.32s cubic-bezier(0.4,0,0.2,1); z-index: 20; }
+  .panel.open { transform: translateY(0); }
+  .panel-head { background: var(--surface); padding: 16px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .panel-head h2 { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); }
+  .back-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 50%; width: 34px; height: 34px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .cart-body { flex: 1; overflow-y: auto; padding: 12px 16px; scrollbar-width: none; }
+  .cart-body::-webkit-scrollbar { display: none; }
+  .empty-msg { text-align: center; color: var(--muted); font-size: 14px; padding: 40px 0; }
+  .ci { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); }
+  .ci img, .ci .ci-emoji { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; flex-shrink: 0; background: var(--surface2); }
+  .ci .ci-emoji { display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .ci-info { flex: 1; }
+  .ci-name { font-size: 13px; font-weight: 500; color: var(--text); font-family: var(--font-khmer); }
+  .ci-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .ci-price { font-size: 14px; font-weight: 500; color: var(--accent2); white-space: nowrap; }
+  .cart-foot { padding: 14px 16px; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+  .total-row { display: flex; justify-content: space-between; font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
+  .total-row span:last-child { color: var(--accent2); }
+  .field { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 11px 14px; font-family: var(--font-body); font-size: 14px; color: var(--text); outline: none; margin-bottom: 10px; transition: border-color 0.15s; }
+  .field:focus { border-color: var(--accent); }
+  .field::placeholder { color: var(--muted); }
+  .send-btn { width: 100%; background: linear-gradient(135deg,#b56820,#e8a045); border: none; border-radius: 14px; padding: 14px; font-family: var(--font-display); font-size: 15px; font-weight: 700; color: #1a0e04; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
+  .send-btn:hover { opacity: 0.9; }
+  .send-btn:active { transform: scale(0.98); }
+  .send-btn:disabled { background: var(--surface2); color: var(--muted); cursor: default; transform: none; }
+  .err-msg { color: #ff6b6b; font-size: 12px; text-align: center; margin-top: 8px; min-height: 16px; }
 
-/* ── RESPONSIVE ── */
-@media (max-width:430px){
-  body{padding:0 8px;}
-  .hero-title{font-size:24px;}
-  .hero-subtitle{font-size:16px;}
-}
+  /* ── SUCCESS PANEL ── */
+  .success-panel {
+    position: absolute; inset: 0;
+    background: #0d0d0d;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 2rem 2rem; z-index: 30;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .success-panel.open { transform: translateY(0); }
+
+  /* amber glow circles */
+  .sp-glow1 { position: absolute; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(200,125,48,0.18) 0%, transparent 70%); top: -80px; right: -80px; pointer-events: none; }
+  .sp-glow2 { position: absolute; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(200,125,48,0.10) 0%, transparent 70%); bottom: -60px; left: -60px; pointer-events: none; }
+
+  .sp-card { position: relative; z-index: 1; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; width: 100%; max-width: 360px; overflow: hidden; animation: cardIn 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+  @keyframes cardIn { from { opacity:0; transform:translateY(30px) scale(0.96); } to { opacity:1; transform:translateY(0) scale(1); } }
+
+  .sp-banner { width: 100%; height: 100px; background: linear-gradient(135deg,#3a1f0a 0%,#7a4010 40%,#b56820 100%); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .sp-banner-pattern { position: absolute; inset: 0; opacity: 0.1; background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.3) 10px, rgba(255,255,255,0.3) 11px); }
+  .sp-banner-name { font-family: var(--font-display); color: var(--accent2); font-size: 1rem; font-weight: 700; z-index: 1; text-align: center; line-height: 1.3; }
+  .sp-banner-sub { color: rgba(245,217,168,0.5); font-size: 0.65rem; font-weight: 300; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+
+  .sp-body { padding: 1.5rem 1.5rem 1.25rem; }
+  .sp-icon { font-size: 2.8rem; display: block; margin-bottom: 1rem; animation: pop 0.5s 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
+  @keyframes pop { from { opacity:0; transform:scale(0.3) rotate(-20deg); } to { opacity:1; transform:scale(1) rotate(0); } }
+
+  .sp-title { font-family: var(--font-display); font-size: 1.45rem; font-weight: 900; color: var(--accent2); line-height: 1.25; }
+  .sp-khmer { font-family: var(--font-khmer); font-size: 0.88rem; color: rgba(245,217,168,0.6); font-weight: 300; margin-top: 5px; }
+  .sp-wait { font-family: var(--font-khmer); font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+  .sp-wait strong { color: var(--accent2); font-weight: 700; }
+
+  .sp-divider { width: 36px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 1rem auto; }
+
+  .sp-receipt { background: #111; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 0.85rem 1rem; text-align: left; margin-bottom: 1.25rem; }
+  .sp-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 0.8rem; color: rgba(255,255,255,0.5); border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .sp-row:last-child { border-bottom: none; }
+  .sp-row .lbl { color: rgba(255,255,255,0.3); font-size: 0.72rem; }
+  .sp-row .val { color: rgba(255,255,255,0.7); font-weight: 500; }
+  .sp-row .prc { color: var(--accent); font-weight: 500; }
+  .sp-total { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; font-size: 0.95rem; font-weight: 600; }
+  .sp-total .tl { color: rgba(255,255,255,0.35); }
+  .sp-total .tp { color: var(--accent2); font-family: var(--font-display); font-size: 1.1rem; }
+
+  .sp-btn { width: 100%; padding: 0.8rem; border-radius: 12px; border: none; background: linear-gradient(135deg,#b56820,#e8a045); color: #1a0e04; font-family: var(--font-body); font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: opacity 0.2s, transform 0.15s; }
+  .sp-btn:hover { opacity: 0.88; transform: scale(0.99); }
+  .sp-btn:active { transform: scale(0.97); }
+
+  .sp-footer { margin-top: 1rem; font-size: 0.65rem; color: rgba(255,255,255,0.18); letter-spacing: 0.1em; text-transform: uppercase; position: relative; z-index: 1; }
 </style>
 </head>
 <body>
+<div id="app">
 
-<!-- HERO SECTION -->
-<section class="hero">
-  <div class="hero-overlay">
-    <h1 class="hero-title">Welcome to Indigenous Food & Coffee</h1>
-    <h2 class="hero-subtitle">ឃ្លានហើយមែនអត់? ហ្ចឹងកម្មង់ចាណាងញាំហូវ!</h2>
-  </div>
-</section>
-
-<!-- HEADER -->
-<div class="header">
-  <div>Menu</div>
-  <button class="cart-btn" onclick="openCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
-</div>
-
-<!-- MENU -->
-<div class="menu-body" id="menuBody"></div>
-
-<!-- CART OVERLAY -->
-<div class="overlay" id="cartOverlay" onclick="handleOverlayClick(event)">
-  <div class="cart-sheet" id="cartSheet">
-    <div class="sheet-header">
-      <div>Your Order</div>
-      <button class="close-btn" onclick="closeCart()">✕</button>
+  <!-- ── HERO SLIDER ── -->
+  <div class="hero-slider" id="heroSlider">
+    <div class="slide slide-1 active">
+      <div class="slide-content">
+        <div class="hero-top">
+          <div class="hero-logo">
+            <div class="hero-logo-circle"><img src="logo.png" alt="Logo"></div>
+            <div class="hero-logo-text">
+              <span class="hero-logo-name">Indigenous Food</span>
+              <span class="hero-logo-name" style="color:var(--accent);">&amp; Coffee</span>
+              <span class="hero-logo-sub">ភ្នំពេញ · Phnom Penh</span>
+            </div>
+          </div>
+          <button class="cart-fab" onclick="openCart()">
+            Cart <span class="n" id="cartCount">0</span>
+          </button>
+        </div>
+        <div class="hero-bottom">
+          <span class="hero-khmer-tag">មុខម្ហូប អាហារជនជាតិដើម</span>
+          <div class="hero-title">Welcome to<br><span>Indigenous</span> Food</div>
+          <div class="hero-sub">ឃ្លានហើយមែនអត់? កម្មង់ឲ្យលឿនហូវ!</div>
+        </div>
+      </div>
     </div>
-    <div class="cart-items" id="cartItems"></div>
-    <div class="cart-footer">
-      <input class="form-input" id="customerName" placeholder="Your Table">
-      <input class="form-input" id="customerPhone" placeholder="Phone (optional)">
+    <div class="slide slide-2">
+      <div class="slide-content">
+        <div class="hero-top">
+          <div class="hero-logo">
+            <div class="hero-logo-circle"><img src="logo.png" alt="Logo"></div>
+            <div class="hero-logo-text">
+              <span class="hero-logo-name">Indigenous Food</span>
+              <span class="hero-logo-name" style="color:var(--accent);">&amp; Coffee</span>
+              <span class="hero-logo-sub">ភ្នំពេញ · Phnom Penh</span>
+            </div>
+          </div>
+          <button class="cart-fab" onclick="openCart()">
+            Cart <span class="n" id="cartCount2">0</span>
+          </button>
+        </div>
+        <div class="hero-bottom">
+          <span class="hero-khmer-tag">ភ្លក្សរសជាតិពិតប្រាកដ</span>
+          <div class="hero-title">Fresh &amp;<br><span>Authentic</span> Taste</div>
+          <div class="hero-sub">រសជាតិពិតប្រាកដ ដូចស្នេហាគ្រាដំបូងចឹង</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide slide-3">
+      <div class="slide-content">
+        <div class="hero-top">
+          <div class="hero-logo">
+            <div class="hero-logo-circle"><img src="logo.png" alt="Logo"></div>
+            <div class="hero-logo-text">
+              <span class="hero-logo-name">Indigenous Food</span>
+              <span class="hero-logo-name" style="color:var(--accent);">&amp; Coffee</span>
+              <span class="hero-logo-sub">ភ្នំពេញ · Phnom Penh</span>
+            </div>
+          </div>
+          <button class="cart-fab" onclick="openCart()">
+            Cart <span class="n" id="cartCount3">0</span>
+          </button>
+        </div>
+        <div class="hero-bottom">
+          <span class="hero-khmer-tag">ស្រាពាង</span>
+          <div class="hero-title">Order Now &amp;<br><span>Enjoy</span> More</div>
+          <div class="hero-sub">ស្រាពាងមានរសជាតិឆ្ងាញ់</div>
+        </div>
+      </div>
+    </div>
+    <div class="harrow prev" id="hPrev">‹</div>
+    <div class="harrow next" id="hNext">›</div>
+    <div class="hero-dots" id="heroDots">
+      <div class="hdot active" data-i="0"></div>
+      <div class="hdot" data-i="1"></div>
+      <div class="hdot" data-i="2"></div>
+    </div>
+  </div>
+
+  <!-- ── CATEGORIES ── -->
+  <div class="cats-wrap">
+    <div class="cats">
+      <button class="cat on" onclick="filterCat(this,'all')">All</button>
+      <button class="cat" onclick="filterCat(this,'janang')">ចាណាង</button>
+      <button class="cat" onclick="filterCat(this,'food')">Food</button>
+      <button class="cat" onclick="filterCat(this,'rice')">បាយ &amp; មី</button>
+      <button class="cat" onclick="filterCat(this,'drink')">ភេសជ្ជៈ</button>
+    </div>
+  </div>
+
+  <!-- ── MENU ── -->
+  <div class="menu-scroll">
+    <div class="grid" id="menuGrid"></div>
+  </div>
+
+  <!-- ── CART PANEL ── -->
+  <div class="panel" id="cartPanel">
+    <div class="panel-head">
+      <button class="back-btn" onclick="closeCart()">←</button>
+      <h2>Your order</h2>
+    </div>
+    <div class="cart-body" id="cartBody"></div>
+    <div class="cart-foot">
       <div class="total-row">
-        <span class="total-label">Total</span>
-        <span class="total-value" id="cartTotal">$0.00</span>
+        <span>Total</span><span id="cartTotal">$0.00</span>
       </div>
-      <button class="order-btn" onclick="placeOrder()">📲 Send Order</button>
-      <div class="status-msg" id="statusMsg"></div>
+      <input class="field" id="custName" placeholder="លេខតុ ឬ ឈ្មោះ / Table or name">
+      <button class="send-btn" id="sendBtn" onclick="placeOrder()">Send order to kitchen →</button>
+      <div class="err-msg" id="errMsg"></div>
     </div>
   </div>
-</div>
 
-<!-- SUCCESS SCREEN -->
-<div class="success-overlay" id="successScreen">
-  <div class="success-big">🎉</div>
-  <div class="success-title">អ្នកបានធ្វើការកម្មង់រួចរាល់ហើយ!</div>
-  <div class="success-title">សូមចាំ 2 ភ្លេតសិនណា🥹🥹!</div>
-  <div class="success-sub">Your order was sent via Telegram.<br>We'll start preparing it right away!</div>
-  <button class="new-order-btn" onclick="resetOrder()">តោះ គម្មង់ថែមទៀត😋</button>
-</div>
-
-<script>
-// ── TELEGRAM BOT ──
-const TELEGRAM_BOT_TOKEN = "8445527600:AAGVXX3d4Q7dcu_TfwqMzsfYci3oun1fvbY";
-const TELEGRAM_CHAT_IDS = ["6040423224","5427036666"]; // add more chat IDs here
-
-// ── MENU DATA API-LIKE
-const menuData = [
-  { id:1, name:"ចាណាង សាច់គោ", price:3, image:"https://i.pinimg.com/1200x/53/0a/8a/530a8a2fc5335529bb1186b1a7490331.jpg" },
-  { id:2, name:"ចាណាង សាច់ជ្រូក", price:3, image:"https://i.pinimg.com/1200x/53/0a/8a/530a8a2fc5335529bb1186b1a7490331.jpg" },
-  { id:3, name:"ឡាបសាច់ជ្រូក", price:3, image:"https://i.pinimg.com/1200x/53/0a/8a/530a8a2fc5335529bb1186b1a7490331.jpg" },
-  { id:4, name:"សាច់ក្រក់", price:3, image:"https://i.pinimg.com/1200x/53/0a/8a/530a8a2fc5335529bb1186b1a7490331.jpg" }
-];
-
-let cart={};
-
-// ── RENDER MENU
-function renderMenu(){
-  const body=document.getElementById("menuBody");
-  body.innerHTML="";
-  menuData.forEach(item=>{
-    const qty=cart[item.id]||0;
-    const card=document.createElement("div");
-    card.className="item-card";
-    card.innerHTML=`
-      <img src="${item.image}" alt="${item.name}">
-      <div class="item-info">
-        <div class="item-name">${item.name}</div>
-        <div class="item-price">$${item.price.toFixed(2)}</div>
+  <!-- ── SUCCESS PANEL ── -->
+  <div class="success-panel" id="successPanel">
+    <div class="sp-glow1"></div>
+    <div class="sp-glow2"></div>
+    <div class="sp-card">
+      <div class="sp-banner">
+        <div class="sp-banner-pattern"></div>
+        <div>
+          <div class="sp-banner-name">Indigenous Food &amp; Coffee</div>
+          <div class="sp-banner-sub">ភ្នំពេញ · Phnom Penh</div>
+        </div>
       </div>
-      ${qty===0?`<button class="add-btn" onclick="addItem(${item.id})">+</button>`:
-      `<div><button onclick="removeItem(${item.id})">−</button> <span>${qty}</span> <button onclick="addItem(${item.id})">+</button></div>`}`;
-    body.appendChild(card);
-  });
-}
+      <div class="sp-body">
+        <span class="sp-icon">🎉</span>
+        <div class="sp-title">Order Received!</div>
+        <div class="sp-khmer">អ្នកបានធ្វើការកម្មង់រួចរាល់ហើយ!</div>
+        <div class="sp-wait"><strong>សូមចាំ 2 ភ្លេតសិនណា🥹🥹</strong> 🫶</div>
+        <div class="sp-divider"></div>
+        <div class="sp-receipt" id="spReceipt"></div>
+        <button class="sp-btn" onclick="resetAll()">តោះ គម្មង់ថែមទៀត😋</button>
+      </div>
+    </div>
+    <div class="sp-footer">Indigenous Food &amp; Coffee · Phnom Penh</div>
+  </div>
 
-// ── CART FUNCTIONS
-function addItem(id){ cart[id]=(cart[id]||0)+1; updateCartCount(); renderMenu(); }
-function removeItem(id){ if(cart[id]>1) cart[id]--; else delete cart[id]; updateCartCount(); renderMenu(); }
-function updateCartCount(){ document.getElementById("cartCount").textContent=Object.values(cart).reduce((a,b)=>a+b,0); }
+</div>
+<script>
+  /* ── CONFIG ── */
+  const TELEGRAM_BOT_TOKEN = "8445527600:AAGVXX3d4Q7dcu_TfwqMzsfYci3oun1fvbY";
+  const TELEGRAM_CHAT_ID   = "-1003819324655";
+  const CURRENCY = "$";
 
-function openCart(){ renderCartSheet(); document.getElementById("cartOverlay").classList.add("open"); }
-function closeCart(){ document.getElementById("cartOverlay").classList.remove("open"); }
-function handleOverlayClick(e){ if(e.target===document.getElementById("cartOverlay")) closeCart(); }
+  const MENU = [
+    { id:1, cat:"janang", name:"ចាណាង សាច់ជ្រូក",   price:3,    emoji:"🍔", img:"https://i.ytimg.com/vi/YXD2KlobR7E/sddefault.jpg" },
+    { id:2, cat:"janang", name:"ចាណាង​ សាច់គោ",      price:3,    emoji:"🌶️", img:"https://i.ytimg.com/vi/YXD2KlobR7E/sddefault.jpg" },
+    { id:3, cat:"food",  name:"ឡាបសាច់ជ្រូក",       price:3,    emoji:"🍕", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnNa1PnnVTdNMznuGk9VQLXdm3niUvj9x64Q&s" },
+    { id:4, cat:"food",  name:"សាច់ក្រក់",           price:3,    emoji:"🍕", img:"https://domnor.com/admin/images/product/2024-09-26-16-27-19_1046_1.jpg?v=1" },
+    { id:5, cat:"rice",   name:"បាយឆា",               price:4.50, emoji:"🍛", img:"https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&q=80" },
+    { id:6, cat:"rice",   name:"មីឆា",                price:5.50, emoji:"🍜", img:"https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&q=80" },
+    { id:7, cat:"drink",  name:"ទឹកក្រូចស្រស់",       price:2.00, emoji:"🥤", img:"https://images.unsplash.com/photo-1497534446932-c925b458314e?w=400&q=80" },
+    { id:8, cat:"drink",  name:"កាហ្វេទឹកកក",         price:2.50, emoji:"☕", img:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80" },
+    { id:9, cat:"drink",  name:"ស្មូទទីស្វាយ",        price:3.00, emoji:"🥭", img:"https://images.unsplash.com/photo-1546173159-315724a31696?w=400&q=80" },
+  ];
 
-function renderCartSheet(){
-  const keys=Object.keys(cart);
-  const itemsEl=document.getElementById("cartItems");
-  if(keys.length===0){ itemsEl.innerHTML="<div>Your cart is empty</div>"; document.getElementById("cartTotal").textContent="$0.00"; return; }
-  let total=0; itemsEl.innerHTML="";
-  keys.forEach(id=>{
-    const item=menuData.find(m=>m.id==id);
-    const qty=cart[id]; const sub=item.price*qty; total+=sub;
-    const row=document.createElement("div"); row.className="cart-row";
-    row.innerHTML=`<img src="${item.image}" style="width:40px;height:40px;border-radius:8px;">
-      <div class="cart-row-info"><div class="cart-row-name">${item.name}</div><div class="cart-row-sub">x${qty} @ $${item.price.toFixed(2)}</div></div>
-      <div class="cart-row-price">$${sub.toFixed(2)}</div>`;
-    itemsEl.appendChild(row);
-  });
-  document.getElementById("cartTotal").textContent="$"+total.toFixed(2);
-}
+  /* ── HERO SLIDER ── */
+  let hCur = 0;
+  const hSlides = document.querySelectorAll('.slide');
+  const hDots   = document.querySelectorAll('.hdot');
+  let hTimer;
 
-// ── SEND MESSAGE TO MULTIPLE USERS
-async function sendTelegramMessage(message){
-  for(const chatId of TELEGRAM_CHAT_IDS){
-    await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown" })
+  function hGo(n) {
+    hSlides[hCur].classList.remove('active');
+    hDots[hCur].classList.remove('active');
+    hCur = (n + hSlides.length) % hSlides.length;
+    hSlides[hCur].classList.add('active');
+    hDots[hCur].classList.add('active');
+    updateAllBadges();
+  }
+  function hStart() { clearInterval(hTimer); hTimer = setInterval(() => hGo(hCur + 1), 4500); }
+  document.getElementById('hNext').onclick = () => { hGo(hCur + 1); hStart(); };
+  document.getElementById('hPrev').onclick = () => { hGo(hCur - 1); hStart(); };
+  hDots.forEach(d => d.onclick = () => { hGo(+d.dataset.i); hStart(); });
+  hStart();
+
+  /* ── CART LOGIC ── */
+  let cart = {};
+  let activeCat = "all";
+  function fmt(n) { return CURRENCY + n.toFixed(2); }
+
+  function updateAllBadges() {
+    const total = Object.values(cart).reduce((a,b)=>a+b,0);
+    ['cartCount','cartCount2','cartCount3'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = total;
     });
   }
-}
 
-// ── PLACE ORDER
-async function placeOrder(){
-  const name=document.getElementById("customerName").value.trim();
-  const phone=document.getElementById("customerPhone").value.trim();
-  if(!name){ alert("Enter name/table"); return; }
-  if(Object.keys(cart).length===0){ alert("Cart empty"); return; }
-
-  const lines=Object.keys(cart).map(id=>{
-    const item=menuData.find(m=>m.id==id);
-    return `• ${item.name} x${cart[id]} → $${(item.price*cart[id]).toFixed(2)}`;
-  });
-  const total=Object.keys(cart).reduce((acc,id)=>{ const item=menuData.find(m=>m.id==id); return acc+item.price*cart[id]; },0);
-  const now=new Date();
-  const message=`🍽️ *NEW ORDER*\n━━━━━━━━━\n🪑 *Table:* ${name}\n${phone?`📞 *Phone:* ${phone}\n`:''}🕐 *Time:* ${now.toLocaleTimeString()}, ${now.toLocaleDateString()}\n━━━━━━━━━\n${lines.join("\n")}\n━━━━━━━━━\n💰 *Total: $${total.toFixed(2)}*`;
-
-  try{
-    await sendTelegramMessage(message);
-    closeCart(); 
-    document.getElementById("successScreen").classList.add("open"); 
-    cart={}; 
-    updateCartCount(); 
-    renderMenu();
-  }catch(err){
-    const status=document.getElementById("statusMsg");
-    status.className="status-msg error"; status.textContent="❌ "+err.message;
+  function renderGrid() {
+    const grid = document.getElementById("menuGrid");
+    const visible = activeCat === "all" ? MENU : MENU.filter(i => i.cat === activeCat);
+    grid.innerHTML = "";
+    visible.forEach(item => {
+      const qty = cart[item.id] || 0;
+      const card = document.createElement("div");
+      card.className = "item-card";
+      card.innerHTML = `
+        <div class="item-img-wrap">
+          ${item.img
+            ? `<img src="${item.img}" alt="${item.name}" onerror="this.parentElement.innerHTML='<div class=item-fallback>${item.emoji}</div>'">`
+            : `<div class="item-fallback">${item.emoji}</div>`}
+        </div>
+        <div class="item-body">
+          <div class="item-name">${item.name}</div>
+          <div class="item-bottom">
+            <div class="item-price">${fmt(item.price)}</div>
+            ${qty === 0
+              ? `<button class="add-btn" onclick="add(${item.id})">+</button>`
+              : `<div class="qty-row">
+                   <button onclick="rem(${item.id})">−</button>
+                   <span class="num">${qty}</span>
+                   <button onclick="add(${item.id})">+</button>
+                 </div>`}
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
   }
-}
 
-function resetOrder(){ 
-  cart={}; 
-  document.getElementById("successScreen").classList.remove("open"); 
-  document.getElementById("customerName").value=""; 
-  document.getElementById("customerPhone").value=""; 
-  renderMenu(); 
-  updateCartCount(); 
-}
+  function add(id) { cart[id] = (cart[id] || 0) + 1; updateAllBadges(); renderGrid(); }
+  function rem(id) { if (cart[id] > 0) cart[id]--; if (!cart[id]) delete cart[id]; updateAllBadges(); renderGrid(); }
 
-// ── INITIAL RENDER
-renderMenu();
+  function filterCat(btn, cat) {
+    document.querySelectorAll(".cat").forEach(b => b.classList.remove("on"));
+    btn.classList.add("on");
+    activeCat = cat;
+    renderGrid();
+  }
+
+  function openCart()  { document.getElementById("cartPanel").classList.add("open"); renderCart(); }
+  function closeCart() { document.getElementById("cartPanel").classList.remove("open"); }
+
+  function renderCart() {
+    const body = document.getElementById("cartBody");
+    const keys = Object.keys(cart);
+    if (!keys.length) {
+      body.innerHTML = `<div class="empty-msg">Your cart is empty 🛒</div>`;
+      document.getElementById("cartTotal").textContent = fmt(0);
+      return;
+    }
+    let total = 0;
+    body.innerHTML = "";
+    keys.forEach(id => {
+      const item = MENU.find(m => m.id === +id);
+      const qty = cart[id];
+      const sub = item.price * qty;
+      total += sub;
+      const div = document.createElement("div");
+      div.className = "ci";
+      div.innerHTML = `
+        ${item.img
+          ? `<img src="${item.img}" alt="${item.name}" onerror="this.outerHTML='<div class=ci-emoji>${item.emoji}</div>'">`
+          : `<div class="ci-emoji">${item.emoji}</div>`}
+        <div class="ci-info">
+          <div class="ci-name">${item.name}</div>
+          <div class="ci-sub">×${qty} × ${fmt(item.price)}</div>
+        </div>
+        <div class="ci-price">${fmt(sub)}</div>`;
+      body.appendChild(div);
+    });
+    document.getElementById("cartTotal").textContent = fmt(total);
+  }
+
+  function buildSuccessReceipt(name, total) {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'})
+      + ', ' + now.toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'});
+    const keys = Object.keys(cart);
+    let html = `
+      <div class="sp-row"><span class="lbl">Table</span><span class="val">🪑 ${name}</span></div>
+      <div class="sp-row"><span class="lbl">Time</span><span class="val" style="font-size:0.72rem;">${timeStr}</span></div>
+      <div class="sp-row" style="padding:6px 0 2px;"><span class="lbl">Items</span><span></span></div>`;
+    keys.forEach(id => {
+      const item = MENU.find(m => m.id === +id);
+      html += `<div class="sp-row"><span style="color:rgba(255,255,255,0.65);">• ${item.name} ×${cart[id]}</span><span class="prc">${fmt(item.price * cart[id])}</span></div>`;
+    });
+    html += `<div class="sp-total"><span class="tl">Total</span><span class="tp">${fmt(total)}</span></div>`;
+    document.getElementById('spReceipt').innerHTML = html;
+  }
+
+  async function placeOrder() {
+    const name = document.getElementById("custName").value.trim();
+    const err  = document.getElementById("errMsg");
+    const btn  = document.getElementById("sendBtn");
+    if (!name) { err.textContent = "Please enter your name or table number."; return; }
+    if (!Object.keys(cart).length) { err.textContent = "Your cart is empty."; return; }
+
+    const lines = Object.keys(cart).map(id => {
+      const item = MENU.find(m => m.id === +id);
+      return `• ${item.name} x${cart[id]} → ${fmt(item.price * cart[id])}`;
+    });
+    const total = Object.keys(cart).reduce((acc, id) => acc + MENU.find(m => m.id === +id).price * cart[id], 0);
+
+    const divider = "─────────────────";
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString() + ", " + now.toLocaleDateString();
+    const msg = [`🍽 NEW ORDER`, divider, `🪑 Table: ${name}`, `🕐 Time: ${timeStr}`, divider, lines.join("\n"), divider, `💰 Total: ${fmt(total)}`].join("\n");
+
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+    err.textContent = "";
+
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msg }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        buildSuccessReceipt(name, total);
+        document.getElementById("successPanel").classList.add("open");
+      } else {
+        err.textContent = "Telegram error: " + (data.description || "Check token & chat ID.");
+        btn.disabled = false; btn.textContent = "Send order to kitchen →";
+      }
+    } catch (e) {
+      err.textContent = "Network error. Check your connection.";
+      btn.disabled = false; btn.textContent = "Send order to kitchen →";
+    }
+  }
+
+  function resetAll() {
+    cart = {};
+    document.getElementById("successPanel").classList.remove("open");
+    document.getElementById("cartPanel").classList.remove("open");
+    document.getElementById("custName").value = "";
+    document.getElementById("errMsg").textContent = "";
+    document.getElementById("sendBtn").disabled = false;
+    document.getElementById("sendBtn").textContent = "Send order to kitchen →";
+    updateAllBadges();
+    renderGrid();
+  }
+
+  renderGrid();
 </script>
 </body>
 </html>
