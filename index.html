@@ -144,13 +144,20 @@
   .stat-label { font-size:11px; color:var(--muted); font-family:var(--font-khmer); margin-bottom:6px; }
   .stat-value { font-size:24px; font-weight:700; font-family:var(--font-display); }
 
-  /* ── REPORT FAB ── */
-  .report-fab { position:absolute; bottom:20px; right:16px; width:46px; height:46px; border-radius:50%; background:var(--surface); border:1px solid rgba(200,125,48,0.4); font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:10; box-shadow:0 4px 20px rgba(0,0,0,0.5); transition:transform 0.15s; }
-  .report-fab:hover { transform:scale(1.1); }
-  .report-fab:active { transform:scale(0.95); }
+  /* ── PIN MODAL ── */
+  .pdot { width:12px; height:12px; border-radius:50%; background:var(--border); border:2px solid rgba(255,255,255,0.2); display:inline-block; transition:all 0.15s; }
+  .pdot.filled { background:var(--accent); border-color:var(--accent); }
+  .pdot.shake { animation: pinShake 0.3s ease; }
+  @keyframes pinShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  .pin-key { background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:14px; font-size:1.1rem; font-weight:600; color:var(--text); cursor:pointer; font-family:var(--font-body); transition:all 0.12s; }
+  .pin-key:hover { background:rgba(200,125,48,0.15); border-color:var(--accent); }
+  .pin-key:active { transform:scale(0.93); background:var(--accent); color:#1a0e04; }
+  .pin-cancel { color:var(--muted); font-size:0.9rem; }
+  .pin-del { color:var(--muted); }
 
-  /* ── SCHEDULE BADGE ── */
-  .sched-badge { display:inline-flex; align-items:center; gap:5px; background:rgba(200,125,48,0.12); border:1px solid rgba(200,125,48,0.25); border-radius:100px; padding:4px 12px; font-size:11px; color:var(--accent); font-family:var(--font-body); }
+  /* ── TABS ── */
+  .tab-btn { flex:1; border:none; background:transparent; color:var(--muted); border-radius:10px; padding:7px 8px; font-size:12px; font-weight:500; cursor:pointer; font-family:var(--font-khmer); transition:all 0.18s; }
+  .tab-active { background:var(--accent) !important; color:#1a0e04 !important; font-weight:600; }
 </style>
 </head>
 <body>
@@ -162,7 +169,7 @@
       <div class="slide-content">
         <div class="hero-top">
           <div class="hero-logo">
-            <div class="hero-logo-circle"><img src="logo.png" alt="Logo"></div>
+            <div class="hero-logo-circle" onclick="adminTap()"><img src="logo.png" alt="Logo" style="pointer-events:none;"></div>
             <div class="hero-logo-text">
               <span class="hero-logo-name">Indigenous Food</span>
               <span class="hero-logo-name" style="color:var(--accent);">&amp; Coffee</span>
@@ -182,7 +189,7 @@
       <div class="slide-content">
         <div class="hero-top">
           <div class="hero-logo">
-            <div class="hero-logo-circle"><img src="logo.png" alt="Logo"></div>
+            <div class="hero-logo-circle" onclick="adminTap()"><img src="logo.png" alt="Logo" style="pointer-events:none;"></div>
             <div class="hero-logo-text">
               <span class="hero-logo-name">Indigenous Food</span>
               <span class="hero-logo-name" style="color:var(--accent);">&amp; Coffee</span>
@@ -202,7 +209,7 @@
       <div class="slide-content">
         <div class="hero-top">
           <div class="hero-logo">
-            <div class="hero-logo-circle"><img src="logo.png" alt="Logo"></div>
+            <div class="hero-logo-circle" onclick="adminTap()"><img src="logo.png" alt="Logo" style="pointer-events:none;"></div>
             <div class="hero-logo-text">
               <span class="hero-logo-name">Indigenous Food</span>
               <span class="hero-logo-name" style="color:var(--accent);">&amp; Coffee</span>
@@ -243,8 +250,32 @@
     <div class="grid" id="menuGrid"></div>
   </div>
 
-  <!-- 📊 REPORT FAB -->
-  <button class="report-fab" onclick="openReport()" title="Daily Report">📊</button>
+  <!-- PIN MODAL (hidden) -->
+  <div id="pinOverlay" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.8);z-index:40;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+    <div style="background:var(--surface);border:1px solid rgba(200,125,48,0.2);border-radius:24px;padding:1.75rem 1.5rem;width:288px;text-align:center;animation:cardIn 0.3s ease both;">
+      <div style="font-size:2rem;margin-bottom:0.6rem;">🔐</div>
+      <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--accent2);margin-bottom:3px;">Admin Access</div>
+      <div style="font-family:var(--font-khmer);font-size:0.75rem;color:var(--muted);margin-bottom:1.25rem;">បញ្ចូល PIN ដើម្បីចូល Report</div>
+      <div id="pinDots" style="display:flex;justify-content:center;gap:12px;margin-bottom:1.25rem;">
+        <span class="pdot"></span><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;">
+        <button class="pin-key" onclick="pinPress('1')">1</button>
+        <button class="pin-key" onclick="pinPress('2')">2</button>
+        <button class="pin-key" onclick="pinPress('3')">3</button>
+        <button class="pin-key" onclick="pinPress('4')">4</button>
+        <button class="pin-key" onclick="pinPress('5')">5</button>
+        <button class="pin-key" onclick="pinPress('6')">6</button>
+        <button class="pin-key" onclick="pinPress('7')">7</button>
+        <button class="pin-key" onclick="pinPress('8')">8</button>
+        <button class="pin-key" onclick="pinPress('9')">9</button>
+        <button class="pin-key pin-cancel" onclick="closePin()">✕</button>
+        <button class="pin-key" onclick="pinPress('0')">0</button>
+        <button class="pin-key pin-del" onclick="pinDel()">⌫</button>
+      </div>
+      <div id="pinErr" style="font-size:12px;color:#f87171;min-height:16px;font-family:var(--font-khmer);margin-top:4px;"></div>
+    </div>
+  </div>
 
   <!-- CART PANEL -->
   <div class="panel" id="cartPanel">
@@ -289,9 +320,16 @@
 
   <!-- 📊 REPORT PANEL -->
   <div class="report-panel" id="reportPanel">
-    <div class="panel-head">
-      <button class="back-btn" onclick="closeReport()">←</button>
-      <h2 style="font-size:16px;">📊 Daily Sales Report</h2>
+    <div class="panel-head" style="flex-direction:column;align-items:stretch;gap:10px;padding-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="back-btn" onclick="closeReport()">←</button>
+        <h2 style="font-size:16px;">📊 Sales Report</h2>
+      </div>
+      <!-- Tabs -->
+      <div style="display:flex;gap:6px;background:var(--surface2);border-radius:12px;padding:3px;">
+        <button id="tabToday" class="tab-btn tab-active" onclick="switchTab('today')">📅 ថ្ងៃនេះ</button>
+        <button id="tabHistory" class="tab-btn" onclick="switchTab('history')">🗂 History</button>
+      </div>
     </div>
 
     <div class="cart-body" id="reportBody" style="padding:16px;"></div>
@@ -334,22 +372,50 @@
   ];
 
   /* ══════════════════════════════════════
-     DAILY STATS  (localStorage per day)
+     ALL-TIME HISTORY  (localStorage, never auto-cleared)
   ══════════════════════════════════════ */
+
+  // Key for today's stats
   function todayKey() {
     const d = new Date();
-    return `ifcStats_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
+    return `ifcStats_${d.getFullYear()}_${String(d.getMonth()+1).padStart(2,'0')}_${String(d.getDate()).padStart(2,'0')}`;
   }
 
+  // Format date key to readable string
+  function fmtDateKey(key) {
+    // key = ifcStats_2026_03_17
+    const parts = key.replace('ifcStats_','').split('_');
+    if (parts.length < 3) return key;
+    const d = new Date(+parts[0], +parts[1]-1, +parts[2]);
+    return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+  }
+
+  // Load today's stats
   function loadStats() {
     try { return JSON.parse(localStorage.getItem(todayKey())) || {orders:0, revenue:0, items:{}}; }
     catch(e) { return {orders:0, revenue:0, items:{}}; }
   }
 
+  // Save today's stats
   function saveStats(s) {
-    try { localStorage.setItem(todayKey(), JSON.stringify(s)); } catch(e) {}
+    try {
+      localStorage.setItem(todayKey(), JSON.stringify(s));
+      // Track all known day-keys in an index
+      let index = getAllDayKeys();
+      if (!index.includes(todayKey())) {
+        index.push(todayKey());
+        localStorage.setItem('ifcHistoryIndex', JSON.stringify(index));
+      }
+    } catch(e) {}
   }
 
+  // Get all recorded day keys sorted newest first
+  function getAllDayKeys() {
+    try { return JSON.parse(localStorage.getItem('ifcHistoryIndex')) || []; }
+    catch(e) { return []; }
+  }
+
+  // Record order into today + history
   function recordOrder(total) {
     const s = loadStats();
     s.orders++;
@@ -363,16 +429,75 @@
   }
 
   function confirmReset() {
-    if (!confirm('Reset today\'s stats?')) return;
+    if (!confirm('Reset today\'s stats only?')) return;
     try { localStorage.removeItem(todayKey()); } catch(e) {}
     renderReport();
-    showReportMsg('✅ Reset រួចហើយ!', '#4ade80');
+    showReportMsg('✅ Reset ថ្ងៃនេះរួចហើយ!', '#4ade80');
   }
 
   /* ══════════════════════════════════════
      REPORT PANEL UI
   ══════════════════════════════════════ */
-  function openReport()  { renderReport(); document.getElementById('reportPanel').classList.add('open'); }
+  let reportTab = 'today'; // 'today' | 'history'
+
+  /* ── ADMIN TAP (3x logo) + PIN ── */
+  const ADMIN_PIN = '1234'; // ← ប្តូរ PIN របស់អ្នក
+  let pinInput = '', tapCount = 0, tapTimer = null;
+
+  function adminTap() {
+    tapCount++;
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(() => { tapCount = 0; }, 1500);
+    if (tapCount >= 3) { tapCount = 0; showPin(); }
+  }
+
+  function showPin() {
+    pinInput = '';
+    updatePinDots();
+    document.getElementById('pinErr').textContent = '';
+    document.getElementById('pinOverlay').style.display = 'flex';
+  }
+
+  function closePin() {
+    pinInput = '';
+    document.getElementById('pinOverlay').style.display = 'none';
+  }
+
+  function pinPress(d) {
+    if (pinInput.length >= 4) return;
+    pinInput += d;
+    updatePinDots();
+    if (pinInput.length === 4) {
+      setTimeout(() => {
+        if (pinInput === ADMIN_PIN) {
+          closePin();
+          renderReport();
+          document.getElementById('reportPanel').classList.add('open');
+        } else {
+          document.getElementById('pinErr').textContent = 'PIN មិនត្រឹមត្រូវ! សូមព្យាយាមម្ដងទៀត';
+          document.querySelectorAll('.pdot').forEach(d => d.classList.add('shake'));
+          setTimeout(() => {
+            pinInput = '';
+            updatePinDots();
+            document.querySelectorAll('.pdot').forEach(d => d.classList.remove('filled','shake'));
+          }, 600);
+        }
+      }, 150);
+    }
+  }
+
+  function pinDel() {
+    pinInput = pinInput.slice(0,-1);
+    updatePinDots();
+  }
+
+  function updatePinDots() {
+    document.querySelectorAll('.pdot').forEach((dot,i) => {
+      dot.classList.toggle('filled', i < pinInput.length);
+    });
+  }
+
+  function openReport()  { showPin(); }
   function closeReport() { document.getElementById('reportPanel').classList.remove('open'); }
 
   function showReportMsg(msg, color) {
@@ -382,7 +507,16 @@
     setTimeout(() => el.textContent = '', 3000);
   }
 
+  function switchTab(tab) {
+    reportTab = tab;
+    document.getElementById('tabToday').classList.toggle('tab-active', tab==='today');
+    document.getElementById('tabHistory').classList.toggle('tab-active', tab==='history');
+    renderReport();
+  }
+
   function renderReport() {
+    if (reportTab === 'history') { renderHistory(); return; }
+
     const s = loadStats();
     const schedTime = localStorage.getItem('ifcReportTime') || '22:00';
     document.getElementById('reportTime').value = schedTime;
@@ -395,17 +529,15 @@
     const sorted = Object.entries(s.items).sort((a,b) => b[1]-a[1]);
     let rows = '';
     if (!sorted.length) {
-      rows = `<p style="color:var(--muted);font-size:13px;padding:10px 0;font-family:var(--font-khmer);text-align:center;">មិនទាន់មានការបញ្ជាទិញនៅថ្ងៃនេះ</p>`;
+      rows = `<p style="color:var(--muted);font-size:13px;padding:12px 0;font-family:var(--font-khmer);text-align:center;">មិនទាន់មានការបញ្ជាទិញនៅថ្ងៃនេះ</p>`;
     } else {
       sorted.forEach(([nm,qty],i) => {
-        const item = MENU.find(m => m.name === nm);
-        const rev  = item ? fmt(item.price * qty) : '';
-        const isTop = i === 0;
+        const item = MENU.find(m=>m.name===nm);
+        const rev  = item ? fmt(item.price*qty) : '';
+        const isTop = i===0;
         rows += `
           <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
-            <span style="font-family:var(--font-khmer);font-size:13px;color:${isTop?'var(--accent2)':'var(--text)'};">
-              ${isTop ? '🏆 ' : ''}${nm}
-            </span>
+            <span style="font-family:var(--font-khmer);font-size:13px;color:${isTop?'var(--accent2)':'var(--text)'};">${isTop?'🏆 ':''}${nm}</span>
             <div style="display:flex;gap:14px;align-items:center;">
               <span style="font-size:12px;color:var(--muted);">×${qty}</span>
               <span style="font-size:13px;font-weight:600;color:var(--accent);min-width:44px;text-align:right;">${rev}</span>
@@ -414,39 +546,143 @@
       });
     }
 
-    // date string
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-US',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
 
     document.getElementById('reportBody').innerHTML = `
-      <!-- date -->
       <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">${dateStr}</p>
-
-      <!-- stat cards -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-        <div class="stat-card">
-          <div class="stat-label">ចំនួនការបញ្ជា</div>
-          <div class="stat-value" style="color:var(--accent2);">${s.orders}</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">ចំណូលសរុប</div>
-          <div class="stat-value" style="color:var(--accent);">${fmt(s.revenue)}</div>
-        </div>
+        <div class="stat-card"><div class="stat-label">ចំនួនការបញ្ជា</div><div class="stat-value" style="color:var(--accent2);">${s.orders}</div></div>
+        <div class="stat-card"><div class="stat-label">ចំណូលសរុប</div><div class="stat-value" style="color:var(--accent);">${fmt(s.revenue)}</div></div>
       </div>
-
-      <!-- top item -->
       <div style="background:var(--surface);border-radius:12px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
         <span style="font-size:12px;color:var(--muted);font-family:var(--font-khmer);">🏆 លក់ច្រើនជាងគេ</span>
         <span style="font-size:13px;font-weight:600;color:var(--accent2);font-family:var(--font-khmer);">${topName}</span>
       </div>
-
-      <!-- item breakdown -->
       <p style="font-size:12px;color:var(--muted);font-family:var(--font-khmer);margin-bottom:4px;">ចំណែកតាមមុខម្ហូប</p>
-      <div>${rows}</div>
-    `;
+      <div>${rows}</div>`;
 
-    // schedule status
-    document.getElementById('schedStatus').textContent = `⏰ Report នឹងផ្ញើដោយស្វ័យប្រវត្តិ នៅ ${schedTime}`;
+    document.getElementById('schedStatus').textContent = `⏰ Report នឹងផ្ញើ នៅ ${schedTime}`;
+  }
+
+  function renderHistory() {
+    const keys = getAllDayKeys().slice().sort((a,b) => b.localeCompare(a)); // newest first
+
+    if (!keys.length) {
+      document.getElementById('reportBody').innerHTML =
+        `<p style="color:var(--muted);font-size:14px;text-align:center;padding:40px 0;font-family:var(--font-khmer);">មិនទាន់មាន history ណាមួយទេ</p>`;
+      return;
+    }
+
+    // Compute all-time totals
+    let allOrders = 0, allRevenue = 0;
+    const allItems = {};
+    keys.forEach(k => {
+      try {
+        const s = JSON.parse(localStorage.getItem(k)) || {};
+        allOrders += s.orders||0;
+        allRevenue += s.revenue||0;
+        Object.entries(s.items||{}).forEach(([nm,qty]) => { allItems[nm]=(allItems[nm]||0)+qty; });
+      } catch(e){}
+    });
+
+    // All-time top item
+    let allTop = '—', allTopQty = 0;
+    Object.entries(allItems).forEach(([nm,qty]) => { if(qty>allTopQty){allTopQty=qty;allTop=nm;} });
+
+    // Day cards
+    let dayCards = '';
+    keys.forEach(key => {
+      let s = {orders:0, revenue:0, items:{}};
+      try { s = JSON.parse(localStorage.getItem(key)) || s; } catch(e){}
+      const dateLabel = fmtDateKey(key);
+      const isToday = key === todayKey();
+
+      // top item for this day
+      let dTop = '—', dTopQty = 0;
+      Object.entries(s.items).forEach(([nm,qty]) => { if(qty>dTopQty){dTopQty=qty;dTop=nm;} });
+
+      // item rows for this day
+      const dSorted = Object.entries(s.items).sort((a,b)=>b[1]-a[1]);
+      let dRows = dSorted.map(([nm,qty]) => {
+        const item = MENU.find(m=>m.name===nm);
+        const rev = item ? fmt(item.price*qty) : '';
+        return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+          <span style="font-family:var(--font-khmer);font-size:12px;color:rgba(255,255,255,0.6);">• ${nm}</span>
+          <div style="display:flex;gap:10px;">
+            <span style="font-size:11px;color:var(--muted);">×${qty}</span>
+            <span style="font-size:12px;color:var(--accent);">${rev}</span>
+          </div>
+        </div>`;
+      }).join('');
+
+      if (!dRows) dRows = `<p style="font-size:12px;color:var(--muted);padding:4px 0;font-family:var(--font-khmer);">មិនមានទិន្នន័យ</p>`;
+
+      dayCards += `
+        <div style="background:var(--surface);border:1px solid ${isToday?'rgba(200,125,48,0.35)':'var(--border)'};border-radius:16px;margin-bottom:12px;overflow:hidden;">
+          <!-- Day header -->
+          <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;" onclick="toggleDayCard(this)">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:${isToday?'var(--accent2)':'var(--text)'};">${isToday?'📅 ':''}${dateLabel}</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--font-khmer);">${s.orders} ការបញ្ជា · ${fmt(s.revenue)}</div>
+            </div>
+            <span style="color:var(--muted);font-size:14px;transition:transform 0.2s;" class="day-arrow">▼</span>
+          </div>
+          <!-- Day body (collapsed by default except today) -->
+          <div class="day-body" style="padding:10px 14px;${isToday?'':'display:none;'}">
+            <div style="display:flex;gap:8px;margin-bottom:10px;">
+              <div style="flex:1;background:var(--surface2);border-radius:10px;padding:8px;text-align:center;">
+                <div style="font-size:10px;color:var(--muted);font-family:var(--font-khmer);">ការបញ្ជា</div>
+                <div style="font-size:18px;font-weight:700;color:var(--accent2);">${s.orders}</div>
+              </div>
+              <div style="flex:1;background:var(--surface2);border-radius:10px;padding:8px;text-align:center;">
+                <div style="font-size:10px;color:var(--muted);font-family:var(--font-khmer);">ចំណូល</div>
+                <div style="font-size:18px;font-weight:700;color:var(--accent);">${fmt(s.revenue)}</div>
+              </div>
+              <div style="flex:1;background:var(--surface2);border-radius:10px;padding:8px;text-align:center;">
+                <div style="font-size:10px;color:var(--muted);">🏆 Top</div>
+                <div style="font-size:11px;font-weight:600;color:var(--accent2);font-family:var(--font-khmer);margin-top:3px;">${dTop}</div>
+              </div>
+            </div>
+            ${dRows}
+          </div>
+        </div>`;
+    });
+
+    document.getElementById('reportBody').innerHTML = `
+      <!-- All-time summary -->
+      <div style="background:linear-gradient(135deg,rgba(181,104,32,0.15),rgba(200,125,48,0.08));border:1px solid rgba(200,125,48,0.2);border-radius:16px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:11px;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;">All-time Summary</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:var(--muted);font-family:var(--font-khmer);">ថ្ងៃ</div>
+            <div style="font-size:20px;font-weight:700;color:var(--accent2);">${keys.length}</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:var(--muted);font-family:var(--font-khmer);">ការបញ្ជា</div>
+            <div style="font-size:20px;font-weight:700;color:var(--accent2);">${allOrders}</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:var(--muted);font-family:var(--font-khmer);">ចំណូល</div>
+            <div style="font-size:18px;font-weight:700;color:var(--accent);">${fmt(allRevenue)}</div>
+          </div>
+        </div>
+        <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;">
+          <span style="font-size:11px;color:rgba(245,217,168,0.5);font-family:var(--font-khmer);">🏆 All-time Top</span>
+          <span style="font-size:12px;font-weight:600;color:var(--accent2);font-family:var(--font-khmer);">${allTop}</span>
+        </div>
+      </div>
+      <!-- Day-by-day list -->
+      <p style="font-size:12px;color:var(--muted);font-family:var(--font-khmer);margin-bottom:10px;">ប្រវត្តិតាមថ្ងៃ (${keys.length} ថ្ងៃ)</p>
+      ${dayCards}`;
+  }
+
+  function toggleDayCard(header) {
+    const body = header.nextElementSibling;
+    const arrow = header.querySelector('.day-arrow');
+    const isOpen = body.style.display !== 'none';
+    body.style.display = isOpen ? 'none' : 'block';
+    arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
   }
 
   /* ══════════════════════════════════════
