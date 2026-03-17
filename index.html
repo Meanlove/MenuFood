@@ -24,7 +24,7 @@
   .slide.active { opacity: 1; }
   .slide-1 { background-image: linear-gradient(to bottom,rgba(10,5,0,0.2) 0%,rgba(10,5,0,0.5) 55%,rgba(13,13,13,1) 100%), url('https://i.ytimg.com/vi/YXD2KlobR7E/sddefault.jpg'); }
   .slide-2 { background-image: linear-gradient(to bottom,rgba(10,5,0,0.2) 0%,rgba(10,5,0,0.5) 55%,rgba(13,13,13,1) 100%), url('https://i.ytimg.com/vi/U4sYnhdxZvo/hq720.jpg'); }
-  .slide-3 { background-image: linear-gradient(to bottom,rgba(10,5,0,0.2) 0%,rgba(10,5,0,0.5) 55%,rgba(13,13,13,1) 100%), url('https://image.vovworld.vn/w500/Uploaded/vovworld/cqjwqkrwq/2016_10_25/b2.jpg'); }
+  .slide-3 { background-image: linear-gradient(to bottom,rgba(10,5,0,0.2) 0%,rgba(10,5,0,0.5) 55%,rgba(13,13,13,1) 100%), url('hero.png'); }
   .slide-content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 14px 16px 18px; }
   .hero-top { display: flex; justify-content: space-between; align-items: flex-start; }
   .hero-logo { display: flex; align-items: center; gap: 9px; }
@@ -36,7 +36,6 @@
   .cart-fab { background: var(--accent); border: none; border-radius: 24px; color: #1a0e04; font-family: var(--font-body); font-size: 13px; font-weight: 500; padding: 7px 14px; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: opacity 0.15s,transform 0.1s; flex-shrink: 0; }
   .cart-fab:active { transform: scale(0.96); }
   .cart-fab .n { background: rgba(0,0,0,0.2); border-radius: 50%; width: 20px; height: 20px; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
-  .hero-bottom { }
   .hero-khmer-tag { font-family: var(--font-khmer); color: rgba(245,217,168,0.6); font-size: 0.72rem; font-weight: 300; display: block; margin-bottom: 4px; }
   .hero-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; color: #fff; line-height: 1.2; text-shadow: 0 2px 12px rgba(0,0,0,0.4); }
   .hero-title span { color: var(--accent); }
@@ -173,7 +172,7 @@
             <div class="hero-logo-text">
               <span class="hero-logo-name">Indigenous Food</span>
               <span class="hero-logo-name" style="color:var(--accent);">&amp; Coffee</span>
-              <span class="hero-logo-sub">ភ្នំពេញ · Phnom Penh</span>
+              <span class="hero-logo-sub hero-sub">📍ទួលទំពូង</span>
             </div>
           </div>
           <button class="cart-fab" onclick="openCart()">Cart <span class="n" id="cartCount">0</span></button>
@@ -193,7 +192,7 @@
             <div class="hero-logo-text">
               <span class="hero-logo-name">Indigenous Food</span>
               <span class="hero-logo-name" style="color:var(--accent);">&amp; Coffee</span>
-              <span class="hero-logo-sub">ភ្នំពេញ · Phnom Penh</span>
+              <span class="hero-logo-sub hero-sub">📍ទួលទំពូង</span>
             </div>
           </div>
           <button class="cart-fab" onclick="openCart()">Cart <span class="n" id="cartCount2">0</span></button>
@@ -213,7 +212,7 @@
             <div class="hero-logo-text">
               <span class="hero-logo-name">Indigenous Food</span>
               <span class="hero-logo-name" style="color:var(--accent);">&amp; Coffee</span>
-              <span class="hero-logo-sub">ភ្នំពេញ · Phnom Penh</span>
+              <span class="hero-logo-sub hero-sub">📍ទួលទំពូង</span>
             </div>
           </div>
           <button class="cart-fab" onclick="openCart()">Cart <span class="n" id="cartCount3">0</span></button>
@@ -362,13 +361,15 @@
   const MENU = [
     { id:1, cat:"janang", name:"ចាណាង សាច់ជ្រូក", price:3,    emoji:"🍔", img:"https://i.ytimg.com/vi/YXD2KlobR7E/sddefault.jpg" },
     { id:2, cat:"janang", name:"ចាណាង​ សាច់គោ",   price:3,    emoji:"🌶️", img:"https://i.ytimg.com/vi/YXD2KlobR7E/sddefault.jpg" },
-    { id:3, cat:"food",   name:"ឡាបសាច់ជ្រូក",    price:3,    emoji:"🍖", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnNa1PnnVTdNMznuGk9VQLXdm3niUvj9x64Q&s" },
-    { id:4, cat:"food",   name:"សាច់ក្រក់",         price:3,    emoji:"🥩", img:"https://domnor.com/admin/images/product/2024-09-26-16-27-19_1046_1.jpg?v=1" },
-    { id:5, cat:"rice",   name:"បាយឆា",             price:4.50, emoji:"🍛", img:"https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&q=80" },
-    { id:6, cat:"rice",   name:"មីឆា",              price:5.50, emoji:"🍜", img:"https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&q=80" },
-    { id:7, cat:"drink",  name:"ទឹកក្រូចស្រស់",    price:2.00, emoji:"🥤", img:"https://images.unsplash.com/photo-1497534446932-c925b458314e?w=400&q=80" },
-    { id:8, cat:"drink",  name:"កាហ្វេទឹកកក",      price:2.50, emoji:"☕", img:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80" },
-    { id:9, cat:"drink",  name:"ស្មូទទីស្វាយ",     price:3.00, emoji:"🥭", img:"https://images.unsplash.com/photo-1546173159-315724a31696?w=400&q=80" },
+    { id:3, cat:"food",   name:"ឡាបសាច់ជ្រូក",    price:3,    emoji:"🍖", img:"lab.png" },
+    { id:4, cat:"food",   name:"សម្លរបុក",    price:3,    emoji:"🍖", img:"somlorbok.png" },
+    { id:5, cat:"food",   name:"សាច់ក្រក់",         price:3,    emoji:"🥩", img:"sachkrok.png" },
+    { id:10, cat:"food",  name:"បុកល្ងរ",     price:3.00, emoji:"🥭", img:"boklngor.png" },
+    { id:6, cat:"rice",   name:"បាយឆា",             price:3, emoji:"🍛", img:"https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&q=80" },
+    { id:7, cat:"rice",   name:"មីឆា",              price:5.50, emoji:"🍜", img:"https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&q=80" },
+    { id:8, cat:"drink",  name:"ស្រាពាងជនជាតិដើម",    price:5, emoji:"🥤", img:"srapeang.png" },
+    { id:9, cat:"drink",  name:"កាហ្វេទឹកកក",      price:2.50, emoji:"☕", img:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80" },
+    { id:11, cat:"drink",  name:"Ganzberg",      price:0.75, emoji:"☕", img:"ganz.png" },
   ];
 
   /* ══════════════════════════════════════
