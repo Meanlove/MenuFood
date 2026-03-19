@@ -840,7 +840,7 @@
     btn.classList.add('on'); activeCat=cat; renderGrid();
   }
 
-  function openCart() { document.getElementById('cartPanel').classList.add('open'); renderCart(); }
+  function openCart() { document.getElementById('cartP anel').classList.add('open'); renderCart(); }
   function closeCart(){ document.getElementById('cartPanel').classList.remove('open'); }
 
   function renderCart(){
