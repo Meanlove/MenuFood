@@ -365,11 +365,9 @@
     { id:4, cat:"food",   name:"សម្លរបុក",    price:3,    emoji:"🍖", img:"somlorbok.png" },
     { id:5, cat:"food",   name:"សាច់ក្រក់",         price:3,    emoji:"🥩", img:"sachkrok.png" },
     { id:10, cat:"food",  name:"បុកល្ងរ",     price:3.00, emoji:"🥭", img:"boklngor.png" },
-    { id:6, cat:"rice",   name:"បាយឆា",             price:3, emoji:"🍛", img:"https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&q=80" },
-    { id:7, cat:"rice",   name:"មីឆា",              price:5.50, emoji:"🍜", img:"https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&q=80" },
     { id:8, cat:"drink",  name:"ស្រាពាងជនជាតិដើម",    price:5, emoji:"🥤", img:"srapeang.png" },
-    { id:9, cat:"drink",  name:"កាហ្វេទឹកកក",      price:2.50, emoji:"☕", img:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80" },
     { id:11, cat:"drink",  name:"Ganzberg",      price:0.75, emoji:"☕", img:"ganz.png" },
+    { id:11, cat:"drink",  name:"កាហ្វេទឹកកក",      price:0.75, emoji:"☕", img:"coffee2.png" },
   ];
 
   /* ══════════════════════════════════════
